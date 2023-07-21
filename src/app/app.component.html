@@ -1,0 +1,80 @@
+<div class="container-login" *ngIf="!isLogger">
+  <mat-card>
+      <div>
+        <img matCardImage src="../assets/image/logo_900x250px.png">
+      </div>
+      <mat-card-content>
+        <form class="form-login" [formGroup]="formResource" >
+          <mat-form-field class="field-full-width" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput formControlName="emailFormControl" placeholder="Email" required>
+            <mat-hint>Digite seu email</mat-hint>
+            <mat-error><app-error-message [form-control]="formResource.get('emailFormControl')"></app-error-message></mat-error>
+          </mat-form-field>
+          <mat-form-field class="field-full-width" appearance="outline">
+            <mat-label>Senha</mat-label>
+            <input type="password" matInput formControlName="passwordFormControl" placeholder="Senha">
+            <mat-hint>Digite sua senha</mat-hint>
+            <mat-error><app-error-message [form-control]="formResource.get('passwordFormControl')"></app-error-message></mat-error>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+          <button mat-raised-button [disabled]="!formResource.valid"  (click)="login()">Login</button>
+      </mat-card-actions>
+      <mat-card-footer align="center">
+          <a href="/">Esqueci a senha</a>
+      </mat-card-footer>
+  </mat-card>
+</div>
+
+<div class="container" *ngIf="isLogger">
+  <header>
+    <mat-toolbar color="primary">
+      <button class="icomenu" [disabled]="!isLogger" mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div>
+        <img class="logomarca" src="../assets/image/logonegativov2_900x250px.png" alt="" routerLink="/">
+      </div>
+      <span class="toolbar-spacer"></span>
+      <!-- Logged in user -->
+      <div *ngIf="isLogger" class="login">
+        <div class="avatar" [style.background-image]="'url(&quot;' + this.avatar + '&quot;)'"></div>
+        <!-- <mat-icon>account_circle</mat-icon> -->
+        <span>{{ this.userLogged.userNmName }}</span>
+        <button mat-mini-fab color="secondary" (click)="logout()">
+          <mat-icon>login</mat-icon>
+        </button>
+        <!-- Settings -->
+        <button mat-icon-button routerLink="/users/{{this.userLogged.uid}}/edit">
+          <mat-icon>settings</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
+  </header>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="push">
+      <mat-nav-list >
+        <div mat-subheader>Cadastro</div>
+        <!-- MENU -->
+        <mat-list-item *ngFor="let menu of menus" [routerLink]="menu.url" [routerLinkActive]="['activeRoute']" [routerLinkActiveOptions]="{exact: true}"  (click)="sidenav.toggle()">
+          <mat-icon mat-list-icon>{{menu.icon}}</mat-icon>
+          <div mat-line>{{menu.name}}</div>
+        </mat-list-item>
+        <!-- <mat-divider></mat-divider> -->
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet>
+      </router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <footer class="footer">
+    <div class="footer-text">
+      <mat-icon>copyright</mat-icon>
+      <span>MIDILABS - Mídias Digitais Ltda.</span>
+    </div>
+  </footer>
+</div>
+
